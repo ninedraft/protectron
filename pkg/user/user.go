@@ -13,12 +13,13 @@ import (
 const Timestamp = time.RFC3339
 
 type User struct {
-	ID       int64     `json:"id"`
-	Name     string    `json:"name"`
-	Username string    `json:"username"`
-	IsBanned bool      `json:"is_banned"`
-	BanDate  time.Time `json:"ban_date"`
-	JoinDate time.Time `json:"join_date"`
+	ID         int64     `json:"id"`
+	TelegramID int64     `json:"telegram_id"`
+	Name       string    `json:"name"`
+	Username   string    `json:"username"`
+	IsBanned   bool      `json:"is_banned"`
+	BanDate    time.Time `json:"ban_date"`
+	JoinDate   time.Time `json:"join_date"`
 }
 
 func (user User) String() string {
