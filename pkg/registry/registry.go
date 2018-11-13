@@ -8,6 +8,12 @@ type Registry struct {
 	db *storm.DB
 }
 
-func New() (Registry, error) {
-	return Registry{}, nil
+func New(dbPath string) (Registry, error) {
+	var stDB, err = storm.Open(dbPath)
+	if err != nil {
+		return Registry{}, err
+	}
+	return Registry{
+		db: stDB,
+	}, nil
 }
