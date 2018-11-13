@@ -17,6 +17,7 @@ type User struct {
 	Name     string    `json:"name"`
 	Username string    `json:"username"`
 	IsBanned bool      `json:"is_banned"`
+	BanDate  time.Time `json:"ban_date"`
 	JoinDate time.Time `json:"join_date"`
 }
 
