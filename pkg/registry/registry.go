@@ -1,6 +1,8 @@
 package registry
 
 import (
+	"github.com/ninedraft/protectron/pkg/user"
+
 	"github.com/asdine/storm"
 )
 
@@ -16,4 +18,12 @@ func New(dbPath string) (Registry, error) {
 	return Registry{
 		db: stDB,
 	}, nil
+}
+
+func (registry Registry) IsBanned(telegramID int64) (bool, error) {
+	var u user.User
+	if err := registry.db.One("TelegramID", telegramID, &u); err != nil {
+		return false, err
+	}
+	return u.IsBanned, nil
 }
