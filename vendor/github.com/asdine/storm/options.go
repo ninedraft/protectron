@@ -5,7 +5,7 @@ import (
 
 	"github.com/asdine/storm/codec"
 	"github.com/asdine/storm/index"
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // BoltOptions used to pass options to BoltDB.

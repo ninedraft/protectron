@@ -3,7 +3,7 @@ package storm
 import (
 	"bytes"
 
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // A BucketScanner scans a Node for a list of buckets

@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/asdine/storm/internal"
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // NewListIndex loads a ListIndex

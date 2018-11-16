@@ -2,7 +2,7 @@ package storm
 
 import (
 	"github.com/asdine/storm/codec"
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // A Node in Storm represents the API to a BoltDB bucket.

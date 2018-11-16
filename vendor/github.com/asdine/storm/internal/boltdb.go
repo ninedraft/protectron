@@ -3,7 +3,7 @@ package internal
 import (
 	"bytes"
 
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // Cursor that can be reversed
@@ -42,16 +42,7 @@ type RangeCursor struct {
 // First element
 func (c *RangeCursor) First() ([]byte, []byte) {
 	if c.Reverse {
-		k, v := c.C.Seek(c.Max)
-
-		// If Seek doesn't find a key it goes to the next.
-		// If so, we need to get the previous one to avoid
-		// including bigger values. #218
-		if !bytes.HasPrefix(k, c.Max) && k != nil {
-			k, v = c.C.Prev()
-		}
-
-		return k, v
+		return c.C.Seek(c.Max)
 	}
 
 	return c.C.Seek(c.Min)

@@ -6,7 +6,7 @@ import (
 
 	"github.com/asdine/storm/index"
 	"github.com/asdine/storm/q"
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 type item struct {

@@ -3,7 +3,7 @@ package storm
 import (
 	"reflect"
 
-	bolt "go.etcd.io/bbolt"
+	"github.com/coreos/bbolt"
 )
 
 // KeyValueStore can store and fetch values by key
@@ -18,8 +18,6 @@ type KeyValueStore interface {
 	GetBytes(bucketName string, key interface{}) ([]byte, error)
 	// SetBytes sets a raw value into a bucket.
 	SetBytes(bucketName string, key interface{}, value []byte) error
-	// KeyExists reports the presence of a key in a bucket.
-	KeyExists(bucketName string, key interface{}) (bool, error)
 }
 
 // GetBytes gets a raw value from a bucket.
@@ -144,27 +142,4 @@ func (n *node) delete(tx *bolt.Tx, bucketName string, id []byte) error {
 	}
 
 	return bucket.Delete(id)
-}
-
-// KeyExists reports the presence of a key in a bucket.
-func (n *node) KeyExists(bucketName string, key interface{}) (bool, error) {
-	id, err := toBytes(key, n.codec)
-	if err != nil {
-		return false, err
-	}
-
-	var exists bool
-	return exists, n.readTx(func(tx *bolt.Tx) error {
-		bucket := n.GetBucket(tx, bucketName)
-		if bucket == nil {
-			return ErrNotFound
-		}
-
-		v := bucket.Get(id)
-		if v != nil {
-			exists = true
-		}
-
-		return nil
-	})
 }
