@@ -11,7 +11,7 @@ type Registry struct {
 }
 
 func New(dbPath string) (Registry, error) {
-	var stDB, err = storm.Open(dbPath)
+	var stDB, err = storm.Open(dbPath, defaultStormOptions())
 	if err != nil {
 		return Registry{}, err
 	}
@@ -20,10 +20,40 @@ func New(dbPath string) (Registry, error) {
 	}, nil
 }
 
+func (registry Registry) AddUser(u user.User) error {
+	var tx, err = registry.db.Begin(true)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	if err := registry.db.Save(&u); err != nil || err != storm.ErrAlreadyExists {
+		return err
+	}
+	return tx.Commit()
+}
+
 func (registry Registry) IsBanned(telegramID int64) (bool, error) {
-	var u user.User
-	if err := registry.db.One("TelegramID", telegramID, &u); err != nil {
+	var tx, err = registry.db.Begin(false)
+	if err != nil {
 		return false, err
 	}
-	return u.IsBanned, nil
+	var u user.User
+	if err := tx.One("TelegramID", telegramID, &u); err != nil {
+		return false, err
+	}
+	return u.IsBanned, tx.Commit()
+}
+
+func (registry Registry) BanUser(telegramID int64) error {
+	var tx, err = registry.db.Begin(true)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	if err := tx.UpdateField(&user.User{
+		TelegramID: telegramID,
+	}, "IsBanned", true); err != nil {
+		return err
+	}
+	return tx.Commit()
 }
