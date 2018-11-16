@@ -2,26 +2,32 @@
 
 
 [[projects]]
-  name = "github.com/asdine/storm"
-  packages = [".","codec","codec/json","index","internal","q"]
-  revision = "5a6fe65e3993f63951c8e3f64c812536c9e23595"
-  version = "v2.1.2"
-
-[[projects]]
-  name = "go.etcd.io/bbolt"
+  name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
-  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
-  version = "v1.3.0"
+  revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+  version = "v1.0"
 
 [[projects]]
-  branch = "master"
-  name = "golang.org/x/sys"
-  packages = ["unix"]
-  revision = "66b7b1311ac80bbafcd2daeef9a5e6e2cd1e2399"
+  name = "github.com/octago/sflags"
+  packages = [".","gen/gpflag"]
+  revision = "efb9cde83c817d30590cf630661142196dea4b6b"
+  version = "v0.2.0"
+
+[[projects]]
+  name = "github.com/spf13/cobra"
+  packages = ["."]
+  revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
+  version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/spf13/pflag"
+  packages = ["."]
+  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
+  version = "v1.0.3"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f82c912062232297e9f0f194e5c788937bd31728fee0829282786af7b5a6627f"
+  inputs-digest = "c36fe76df841a92cde422faaa92db7de27d502507a39b8e6fbcb18185a3a02f1"
   solver-name = "gps-cdcl"
   solver-version = 1
