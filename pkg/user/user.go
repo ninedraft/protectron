@@ -13,7 +13,7 @@ import (
 const Timestamp = time.RFC3339
 
 type User struct {
-	ID         int64     `json:"id"`
+	ID         int       `storm:"id,increment"`
 	TelegramID int64     `json:"telegram_id"`
 	Name       string    `json:"name"`
 	Username   string    `json:"username"`
@@ -62,7 +62,7 @@ func (user User) Values() []interface{} {
 
 func (user User) CSV() []string {
 	return []string{
-		strconv.FormatInt(user.ID, 10),
+		strconv.Itoa(user.ID),
 		user.Name,
 		user.Username,
 		strconv.FormatBool(user.IsBanned),
