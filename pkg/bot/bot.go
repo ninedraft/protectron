@@ -81,6 +81,12 @@ func (bot Bot) Run() error {
 		switch {
 		case (update.Message != nil && update.Message.ForwardFromChat != nil):
 			go func() {
+				defer func() {
+					var recMsg = recover()
+					if recMsg != nil {
+						log.Printf("[PANIC] on message from %q \n%v", update.Message.From, recMsg)
+					}
+				}()
 				var userID = update.Message.From.ID
 				var chatID = update.Message.Chat.ID
 				var messageID = update.Message.MessageID
