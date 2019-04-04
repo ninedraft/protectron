@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/ninedraft/protectron/pkg/proxy"
 	tgbotapi "gopkg.in/telegram-bot-api.v4"
@@ -13,6 +12,13 @@ import (
 type Bot struct {
 	token string
 	proxy *SOCKS5ProxyConfig
+}
+
+func New(token string, proxy *SOCKS5ProxyConfig) Bot {
+	return Bot{
+		token: token,
+		proxy: proxy,
+	}
 }
 
 func (bot Bot) Run() error {
@@ -54,12 +60,17 @@ func (bot Bot) Run() error {
 	}
 	log.Printf("listening for updates")
 	for update := range updates {
-		go processMessage(botContext{
-			Bot:           api,
-			Msg:           update.Message,
-			HostWhitelist: strSet([]string{}),
-			ChatWhitelist: func(id int64) bool { return true },
-		})
+		switch {
+		case update.Message != nil:
+			go processMessage(botContext{
+				Bot:           api,
+				Msg:           update.Message,
+				HostWhitelist: strSet([]string{}),
+				ChatWhitelist: func(id int64) bool { return true },
+			})
+		default:
+			continue
+		}
 	}
 	return nil
 }
@@ -69,26 +80,4 @@ type botContext struct {
 	Msg           *tgbotapi.Message
 	ChatWhitelist idFilter
 	HostWhitelist strFilter
-}
-
-type SOCKS5ProxyConfig struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
-}
-
-func (socks5 SOCKS5ProxyConfig) Address() string {
-	return socks5.Host + ":" + strconv.Itoa(socks5.Port)
-}
-
-func (proxy *SOCKS5ProxyConfig) NoSecurity() bool {
-	return proxy.Password == "" && proxy.Username == ""
-}
-
-func New(token string, proxy *SOCKS5ProxyConfig) Bot {
-	return Bot{
-		token: token,
-		proxy: proxy,
-	}
 }
