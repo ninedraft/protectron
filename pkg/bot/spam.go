@@ -37,8 +37,6 @@ func containsMedia(msg *tgbotapi.Message) bool {
 	return msg.Photo != nil || msg.Video != nil
 }
 
-type idFilter func(id int64) bool
-
 func isForward(msg *tgbotapi.Message, chatWhiteist idFilter) bool {
 	return msg.ForwardFromChat != nil && !chatWhiteist(msg.ForwardFromChat.ID)
 }
