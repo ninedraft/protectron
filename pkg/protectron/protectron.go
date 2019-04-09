@@ -72,6 +72,14 @@ func Run(config Config) {
 			switch {
 			case repostedTooEarly, postedLinkToEarly:
 				log.Printf("kicking user %q:%d from chat", msg.From.UserName, userID)
+				var _, errDeleteMsg = bot.DeleteMessage(tgbotapi.DeleteMessageConfig{
+					ChatID:    msg.Chat.ID,
+					MessageID: msg.MessageID,
+				})
+				if errDeleteMsg != nil {
+					log.Printf("unable to delete message: %v", errDeleteMsg)
+					return
+				}
 				var _, errKickChatMember = bot.KickChatMember(tgbotapi.KickChatMemberConfig{
 					ChatMemberConfig: tgbotapi.ChatMemberConfig{
 						ChatID: msg.Chat.ID,
@@ -80,6 +88,7 @@ func Run(config Config) {
 				})
 				if errKickChatMember != nil {
 					log.Printf("unable to ban user @%s: %v", msg.From.UserName, errKickChatMember)
+					return
 				}
 			case msg.NewChatMembers != nil:
 				for _, newUser := range *msg.NewChatMembers {
