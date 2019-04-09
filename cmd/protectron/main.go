@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/ninedraft/protectron/pkg/cli"
+	"github.com/ninedraft/protectron/pkg/protectron"
 )
 
 func main() {
-	if err := cli.Command().Execute(); err != nil {
+	if err := protectron.Cli().Execute(); err != nil {
 		log.Fatal(err)
 	}
 }
