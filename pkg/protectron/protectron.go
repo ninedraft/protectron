@@ -7,10 +7,13 @@ import (
 	tgbotapi "gopkg.in/telegram-bot-api.v4"
 )
 
+// flag definitions here
+// https://github.com/octago/sflags#flags-based-on-structures------
 type Config struct {
 	Token  string
 	Repost time.Duration
 	Link   time.Duration
+	Proxy  string
 	ProxyAuth
 }
 
@@ -34,6 +37,13 @@ func Run(config Config) {
 	bot, errNewBot := tgbotapi.NewBotAPI(config.Token)
 	if errNewBot != nil {
 		log.Fatal(errNewBot)
+	}
+	if config.Proxy != "" {
+		var clientWithTransport, errClientWithTransport = SOCKS5(config.Proxy, config.ProxyAuth)
+		if errClientWithTransport != nil {
+			log.Fatal(errClientWithTransport)
+		}
+		bot.Client = clientWithTransport
 	}
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
