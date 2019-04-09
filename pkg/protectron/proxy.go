@@ -35,3 +35,15 @@ func SOCKS5(proxyAddr string, authData ProxyAuth) (*http.Client, error) {
 		},
 	}, nil
 }
+
+func DefaultHTTPClient() *http.Client {
+	return &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			Dial: (&net.Dialer{
+				Timeout: 5 * time.Second,
+			}).Dial,
+			TLSHandshakeTimeout: 5 * time.Second,
+		},
+	}
+}
