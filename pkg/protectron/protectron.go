@@ -10,10 +10,10 @@ import (
 // flag definitions here
 // https://github.com/octago/sflags#flags-based-on-structures------
 type Config struct {
-	Token  string
-	Repost time.Duration
-	Link   time.Duration
-	Proxy  string
+	Token  string        `desc:"telegram BotAPI auth token"`
+	Repost time.Duration `desc:"repost quarantine duration"`
+	Link   time.Duration `desc:"link and bot name embedding quaratine duration"`
+	Proxy  string        `desc:"proxy address"`
 	ProxyAuth
 }
 
