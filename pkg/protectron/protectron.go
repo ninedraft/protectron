@@ -32,18 +32,22 @@ func (config Config) getMaxQuarantine() time.Duration {
 }
 
 func Run(config Config) {
+	log.Printf("repost quarantine duration: %s", config.Repost)
+	log.Printf("link and bot name embedding quaratine duration: %s", config.Link)
 	var reg = newRegistry(config.getMaxQuarantine())
 	defer reg.stopVacuum()
-	bot, errNewBot := tgbotapi.NewBotAPI(config.Token)
-	if errNewBot != nil {
-		log.Fatal(errNewBot)
-	}
+	var httpClient = DefaultHTTPClient()
 	if config.Proxy != "" {
+		log.Printf("using proxy %q", config.Proxy)
 		var clientWithTransport, errClientWithTransport = SOCKS5(config.Proxy, config.ProxyAuth)
 		if errClientWithTransport != nil {
 			log.Fatal(errClientWithTransport)
 		}
-		bot.Client = clientWithTransport
+		httpClient = clientWithTransport
+	}
+	bot, errNewBot := tgbotapi.NewBotAPIWithClient(config.Token, httpClient)
+	if errNewBot != nil {
+		log.Fatal(errNewBot)
 	}
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
