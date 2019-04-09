@@ -86,6 +86,13 @@ func Run(config Config) {
 					log.Printf("user %q:%d joined chat", newUser.UserName, userID)
 					reg.addUser(newUser.ID)
 				}
+			case msg.Command() == "ping" && msg.Chat.IsPrivate():
+				bot.Send(tgbotapi.MessageConfig{
+					BaseChat: tgbotapi.BaseChat{
+						ChatID: msg.Chat.ID,
+					},
+					Text: "pong",
+				})
 			}
 		}(update.Message)
 	}
